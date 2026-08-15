@@ -1,0 +1,12 @@
+{
+  "name": "dockerized-microservice-starter",
+  "version": "1.0.0",
+  "description": "Production-ready Dockerized Microservice Boilerplate with multi-stage builds and health diagnostics",
+  "main": "server.js",
+  "scripts": {
+    "test": "node --test tests/health.test.js",
+    "start": "node server.js"
+  },
+  "author": "Syahir Mahmud",
+  "license": "MIT"
+}
