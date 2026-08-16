@@ -4,6 +4,7 @@
 
 const http = require('http');
 
+let isShuttingDown = false;
 let requestCount = 0;
 
 function formatPrometheusMetrics() {
@@ -25,8 +26,13 @@ process_heap_used_bytes ${mem.heapUsed}
 const server = http.createServer((req, res) => {
   requestCount++;
   if (req.url === '/health') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ status: 'UP', service: 'dockerized-microservice-starter' }));
+    if (isShuttingDown) {
+      res.writeHead(503, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'SHUTTING_DOWN' }));
+    } else {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'UP', service: 'dockerized-microservice-starter' }));
+    }
   } else if (req.url === '/metrics') {
     res.writeHead(200, { 'Content-Type': 'text/plain; version=0.0.4' });
     res.end(formatPrometheusMetrics());
@@ -35,6 +41,10 @@ const server = http.createServer((req, res) => {
     res.end('Not Found');
   }
 });
+
+server.shutdown = function() {
+  isShuttingDown = true;
+};
 
 server.formatPrometheusMetrics = formatPrometheusMetrics;
 
