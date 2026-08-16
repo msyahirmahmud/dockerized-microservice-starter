@@ -7,4 +7,9 @@ describe('Dockerized Microservice Health Unit Tests', () => {
     assert.notStrictEqual(server, null);
     assert.strictEqual(typeof server.listen, 'function');
   });
+
+  test('server supports graceful shutdown state handler', () => {
+    assert.strictEqual(typeof server.shutdown, 'function');
+    server.shutdown();
+  });
 });

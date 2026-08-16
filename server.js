@@ -1,24 +1,35 @@
+/**
+ * Dockerized Microservice Entrypoint & Health Controller
+ */
+
 const http = require('http');
 
-const PORT = process.env.PORT || 8080;
+let isShuttingDown = false;
 
 const server = http.createServer((req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-
   if (req.url === '/health') {
-    res.writeHead(200);
-    res.end(JSON.stringify({ status: 'UP', uptime: process.uptime(), memory: process.memoryUsage() }));
-  } else if (req.url === '/api/info') {
-    res.writeHead(200);
-    res.end(JSON.stringify({ name: 'Dockerized Microservice', version: '1.0.0', env: process.env.NODE_ENV || 'development' }));
+    if (isShuttingDown) {
+      res.writeHead(503, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'SHUTTING_DOWN' }));
+    } else {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'UP', service: 'dockerized-microservice-starter' }));
+    }
   } else {
-    res.writeHead(404);
-    res.end(JSON.stringify({ error: 'Not Found' }));
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
   }
 });
 
+server.shutdown = function() {
+  isShuttingDown = true;
+};
+
 if (require.main === module) {
-  server.listen(PORT, () => console.log(`Docker Microservice listening on port ${PORT}`));
+  const PORT = process.env.PORT || 3000;
+  server.listen(PORT, () => {
+    console.log(`Microservice listening on port ${PORT}`);
+  });
 }
 
 module.exports = server;

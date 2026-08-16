@@ -1,14 +1,11 @@
-# Multi-stage Docker build for lightweight production deployment
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-
-FROM node:18-alpine AS runner
+# Lightweight Node.js 18 Alpine production container image
+FROM node:18-alpine
 WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder /app/node_modules ./node_modules
+
 COPY package*.json ./
+RUN npm install --omit=dev
+
 COPY server.js ./
 
 EXPOSE 8080
