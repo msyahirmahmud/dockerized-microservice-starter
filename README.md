@@ -3,9 +3,8 @@
 [![Build Status](https://github.com/msyahirmahmud/dockerized-microservice-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/msyahirmahmud/dockerized-microservice-starter/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Docker Image](https://img.shields.io/badge/Docker-Multi--stage-blue.svg)](https://www.docker.com/)
-[![Tests Passing](https://img.shields.io/badge/Tests-100%25-brightgreen.svg)]()
 
-> Production-ready Microservice Boilerplate featuring multi-stage Alpine Docker builds, HTTP HealthCheck endpoints, and automated CI container validation.
+> Microservice starter featuring multi-stage Alpine Docker builds, HTTP HealthCheck endpoints, and automated CI container validation.
 
 ---
 
